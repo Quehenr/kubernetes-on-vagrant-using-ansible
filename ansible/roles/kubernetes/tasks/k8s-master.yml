@@ -1,25 +1,35 @@
 ---
-- name: "[{{ node_name }}] Initialize the kubernetes cluster using kubeadm"
-  #command: kubeadm init --apiserver-advertise-address="{{ node_ip }}" --apiserver-cert-extra-sans="{{ node_ip }}"  --node-name "{{ node_name }}" --pod-network-cidr={{ pod_network_cidr_block }}
-  command: kubeadm init --apiserver-advertise-address="{{ node_ip }}" --pod-network-cidr={{ pod_network_cidr_block }}
-  # register: join_command
+- name: Reset kubenetes component
+  command: kubeadm reset --force
+  register: reset_cluser
 
-- name: "[{{ node_name }}] Setup kubeconfig for vagrant user"
+- name: Init kubernetes cluster
+  when: reset_cluser is succeeded
+  command: kubeadm init \
+    --apiserver-advertise-address="{{ node_ip }}" \
+    --pod-network-cidr={{ pod_network_cidr_block }}
+  register: init_cluster
+
+- name: "Setup kubeconfig for vagrant user"
   command: "{{ item }}"
   with_items:
     - mkdir -p /home/vagrant/.kube
     - cp -i /etc/kubernetes/admin.conf /home/vagrant/.kube/config
     - chown vagrant:vagrant /home/vagrant/.kube/config
 
-- name: "[{{ node_name }}] Install calico pod network"
+- name: "Install the Tigera Calico operator and custom resource definitions."
   become: false
   # calico가 kubernetes 버전에 맞는 release note 제공해주고 있으니 현재 설치된 kubenetes 버전 확인할 것
-  command: kubectl create -f https://docs.projectcalico.org/v3.15/getting-started/kubernetes/installation/hosted/calico.yaml
+  command: kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
+
+- name: "Install Calico by creating the necessary custom resource"
+  become: false
+  command: kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
   
-## Initialize the kubernetes cluster 생성 시 token이 자동 생성 되니, 생성된 token을 확인하는 식으로 바꿀 수 있다.
-- name: "[{{ node_name }}] Generate join command"
+- name: "Generate join command"
   command: kubeadm token create --print-join-command
   register: join_command
 
-- name: "[{{ node_name }}] Copy join command to local file"
+- name: "Copy join command to local file"
+  become: false
   local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./join-command"

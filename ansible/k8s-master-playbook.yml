@@ -1,12 +1,11 @@
 ---
 - hosts: all
   become: true
-  # remote_user: kubernetes
 
   vars:
     is_master: true
 
   roles:
-    - ubuntu-essential
+    - os-essential
     - docker
     - kubernetes

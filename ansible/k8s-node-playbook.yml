@@ -6,6 +6,6 @@
     is_master: false
     
   roles:
-    - ubuntu-essential
+    - os-essential
     - docker
     - kubernetes
