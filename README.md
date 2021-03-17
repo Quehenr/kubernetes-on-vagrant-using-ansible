@@ -3,7 +3,7 @@ Vagrant로 Virtual OS를 구성 후 Ansible을 통해서 kubernetes cluster 환�
 
 # Prerequisites
 ## Vagrant
-https://www.vagrantup.com/downloads 를 참고하여 설치합니다.
+https://www.vagrantup.com/downloads 를 참고하여 설치합니다.<br>
 설치 후 다음과 같은 command 를 통해서 확인하실 수 있습니다.
 ```bash
 $ vagrant --version 
@@ -15,6 +15,7 @@ https://www.virtualbox.org/wiki/Downloads 를 참고하여 설치합니다.
 
 ## Ansible
 https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html 를 참고하여 설치합니다.
+#### ex. asdf를 통한 설치
 1.  `asdf`를 통한 python 환경 설정
     ```bash
     # python local version 설정
@@ -43,11 +44,11 @@ https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.ht
     $ ansible --version
     
     ansible 2.10.6
-      config file = None
-      configured module search path = ['/Users/younggyu.lee/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
-      ansible python module location = /Users/younggyu.lee/.asdf/installs/python/3.9.1/lib/python3.9/site-packages/ansible
-      executable location = /Users/younggyu.lee/.asdf/installs/python/3.9.1/bin/ansible
-      python version = 3.9.1 (default, Feb 15 2021, 15:12:22) [Clang 12.0.0 (clang-1200.0.32.29)]
+    config file = None
+    configured module search path = ['/Users/younggyu.lee/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+    ansible python module location = /Users/younggyu.lee/.asdf/installs/python/3.9.1/lib/python3.9/site-packages/ansible
+    executable location = /Users/younggyu.lee/.asdf/installs/python/3.9.1/bin/ansible
+    python version = 3.9.1 (default, Feb 15 2021, 15:12:22) [Clang 12.0.0 (clang-1200.0.32.29)]
     ```
 
 # 실행 명령어
