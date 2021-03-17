@@ -1,0 +1,81 @@
+---
+# kubernetes 는 swap을 사용하지 않는다.
+# 1. QoS(Qulity of Service) proposal과 상충된다.
+# 2. Swap을 사용하면 Container의 성능을 예측할 수 없다.
+- name: Remove swapfile from /etc/fstab
+  mount:
+    name: "{{ item }}"
+    fstype: swap
+    state: absent
+  with_items:
+    - swap
+    - none
+
+- name: Disable swap
+  command: swapoff -a
+  when: ansible_swaptotal_mb > 0
+
+- name: Set modprobe to br_netfilter
+  command: modprobe br_netfilter
+
+- name: Disable swappiness and pass bridged IP traffic to iptable's chains
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+  with_items:
+    - { name: 'vm.swappiness', value: '0' }
+    - { name: 'net.bridge.bridge-nf-call-iptables', value: '1' }
+    - { name: 'net.bridge.bridge-nf-call-ip6tables', value: '1'}
+
+- name: Copy docker daemon.json to drop-in directory
+  template: src=docker-daemon.json dest=/etc/docker/daemon.json
+
+- name: Disable firewalld
+  systemd:
+    name: firewalld
+    daemon_reload: no
+    enabled: no
+
+- name: Restart docker
+  systemd:
+    name: docker
+    daemon_reload: yes
+    enabled: yes
+
+- name: Adding yum repository for kubernetes
+  yum_repository:
+    name: kubernetes
+    description: description for kubernetes
+    file: kubernetes
+    baseurl: http://yum.kubernetes.io/repos/kubernetes-el7-x86_64
+    enabled: yes
+    gpgcheck: no
+
+- name: Install Kubernetes binaries
+  yum:
+    name: "{{ packages }}"
+    state: installed
+    update_cache: yes
+  vars:
+    packages:
+      - kubelet
+      - kubeadm
+      - kubectl
+
+- name: Create service drop-in directory
+  file:
+    path: /etc/systemd/system/kubelet.service.d/
+    state: directory
+    owner: vagrant
+    group: vagrant
+    mode: 0755
+
+- name: Copy kubeadm conf to drop-in directory
+  template: src=20-extra-args.conf dest=/etc/systemd/system/kubelet.service.d/20-extra-args.conf
+
+- name: Restart kubelet
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    enabled: yes

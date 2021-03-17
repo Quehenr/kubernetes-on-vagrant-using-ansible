@@ -6,6 +6,8 @@
     is_master: false
     
   roles:
-    - os-essential
-    - docker
+    - install-os-essential
+    - install-docker
     - kubernetes
+    - install-kubernetes
+    - set-kubernetes-work-node
