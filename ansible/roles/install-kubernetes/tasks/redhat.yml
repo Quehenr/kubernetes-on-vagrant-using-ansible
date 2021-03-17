@@ -37,12 +37,6 @@
     daemon_reload: no
     enabled: no
 
-- name: Disable NetworkManager
-  systemd:
-    name: NetworkManager
-    daemon_reload: no
-    enabled: no
-
 - name: Restart docker
   systemd:
     name: docker
