@@ -6,6 +6,8 @@
     is_master: true
 
   roles:
-    - os-essential
-    - docker
-    - kubernetes
+    - install-os-essential
+    - install-docker
+    - install-kubernetes
+    - set-kubernetes-master-node
+    - install-calico

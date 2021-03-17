@@ -1,0 +1,12 @@
+---
+- name: Reset kubenetes component
+  command: kubeadm reset --force
+  register: reset_cluser
+
+- name: "[{{ node_name }}] Copy the join command to server location"
+  copy: src="./join-command" dest=/tmp/join-command.sh mode=0777
+
+- name: "[{{ node_name }}] Join the node to cluster"
+  command: sh /tmp/join-command.sh
+
+# TODO node cluster 에서 cluster server 정보와 token 정보를 연동해줘야 한다.
