@@ -80,10 +80,17 @@ vagrant ssh <VM-name>
 ```bash
 vagrant provision
 ```
-	
+#### Ansible-playbook specific node to specific tasks
+ansible playbook으로 특정 task를 특정 node에 실행하는 방법
+
+```bash
+ansible-playbook -i k8s-hosts.yml playbooks/install-keycloak.yml	
+```
 # Kubernetes Cluster 구조
 |VM name| IP address | CPUs | Memory |
 |---|---|---|---|
 |k8s-master| 172.16.0.10 | 2 | 2 GB |
 |k8s-node-1| 172.16.0.11 | 1 | 2 GB |
 |k8s-node-2| 172.16.0.12 | 1 | 2 GB |
+
+

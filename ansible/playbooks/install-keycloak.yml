@@ -1,0 +1,14 @@
+---
+- name: Install keycloak
+  hosts: k8s-master
+
+  vars:
+    k8s_namespace: managed
+    keycloak:
+      user: admin
+      password: admin
+      host_ip: "{{ ansible_eth1.ipv4.address }}"
+      port: 8080
+
+  roles:
+    - ./roles/install-keycloak
