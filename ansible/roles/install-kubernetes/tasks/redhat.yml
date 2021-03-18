@@ -48,9 +48,10 @@
     name: kubernetes
     description: description for kubernetes
     file: kubernetes
-    baseurl: http://yum.kubernetes.io/repos/kubernetes-el7-x86_64
+    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-$basearch
     enabled: yes
-    gpgcheck: no
+    gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    gpgcheck: yes
 
 - name: Install Kubernetes binaries
   yum:

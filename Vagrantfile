@@ -5,7 +5,8 @@ require 'ffi'
 
 # Vagrant API/syntax version. Do not touch.
 VAGRANTFILE_API_VERSION = "2"
-IMAGE_NAME = "bento/centos-7.6"
+#IMAGE_NAME = "bento/centos-7.6"
+IMAGE_NAME = "bento/centos-7.8"
 NODE_COUNT = 2
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|

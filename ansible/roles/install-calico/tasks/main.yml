@@ -1,9 +1,5 @@
 ---
-- name: "Install the Tigera Calico operator and custom resource definitions."
+- name: "Install the Calico resource definitions."
   become: false
   # calico가 kubernetes 버전에 맞는 release note 제공해주고 있으니 현재 설치된 kubenetes 버전 확인할 것
-  command: kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
-
-- name: "Install Calico by creating the necessary custom resource"
-  become: false
-  command: kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
+  command: kubectl apply -f https://docs.projectcalico.org/v3.15/manifests/calico.yaml
