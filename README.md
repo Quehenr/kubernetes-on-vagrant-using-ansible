@@ -84,7 +84,7 @@ vagrant provision
 ansible playbook으로 특정 task를 특정 node에 실행하는 방법
 
 ```bash
-ansible-playbook -i k8s-hosts.yml playbooks/install-keycloak.yml	
+ansible-playbook -i vagrant-k8s-hosts.yaml playbooks/install-keycloak.yaml	
 ```
 # Kubernetes Cluster 구조
 |VM name| IP address | CPUs | Memory |
