@@ -17,6 +17,7 @@ spec:
       labels:
         k8s-app: metrics-server
     spec:
+      hostNetwork: true
       containers:
       - args:
         - /metrics-server
