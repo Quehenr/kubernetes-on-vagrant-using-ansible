@@ -1,0 +1,9 @@
+---
+- hosts: all
+  become: true
+
+  vars:
+    is_master: true
+
+  roles:
+    - { role: kubernetes/master-node }

@@ -1,0 +1,15 @@
+---
+- name: Copy ingress.yaml
+  template:
+    src: ingress.yaml
+    dest: /home/vagrant
+
+- name: Apply ingress
+  command: kubectl apply -f /home/vagrant/ingress.yaml
+  register: ingress_applied
+
+- name: Remove ingress.yaml
+  file:
+    state: absent
+    path: /home/vagrant/ingress.yaml
+  when: ingress_applied

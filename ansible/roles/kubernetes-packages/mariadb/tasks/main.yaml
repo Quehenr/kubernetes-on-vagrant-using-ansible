@@ -1,0 +1,30 @@
+---
+- name: Copy persistent-volume.yaml
+  template:
+    src: persistent-volume.yaml
+    dest: /home/vagrant
+
+- name: Apply persistent volume
+  command: kubectl apply -f /home/vagrant/persistent-volume.yaml
+  register: pv_applied
+
+- name: Remove persistent-volume.yaml
+  file:
+    state: absent
+    path: /home/vagrant/persistent-volume.yaml
+  when: pv_applied
+
+- name: Copy persistent-volume-claim.yaml
+  template:
+    src: persistent-volume-claim.yaml
+    dest: /home/vagrant
+
+- name: Apply persistent volume claim
+  command: kubectl apply -f /home/vagrant/persistent-volume-claim.yaml
+  register: pvc_applied
+
+- name: Remove persistent-volume-claim.yaml
+  file:
+    state: absent
+    path: /home/vagrant/persistent-volume-claim.yaml
+  when: pvc_applied

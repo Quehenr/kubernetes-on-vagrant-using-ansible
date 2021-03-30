@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: managed
+  labels:
+    app: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      serviceAccountName: prometheus
+      containers:
+        - name: prometheus
+          image: prom/prometheus:v2.25.2
+          imagePullPolicy: Never
+          args:
+            - --config.file=/etc/prometheus/prometheus.yaml
+            - --web.enable-lifecycle
+          ports:
+            - name: prometheus-port
+              containerPort: 9090
+          volumeMounts:
+            - name: prometheus-data
+              mountPath: /etc/prometheus/
+              subPath: prometheus-data
+      volumes:
+        - name: prometheus-data
+          persistentVolumeClaim:
+            claimName: prometheus-pvc
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - hsnc-dti-opn01

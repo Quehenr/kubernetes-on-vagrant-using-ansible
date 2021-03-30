@@ -1,0 +1,24 @@
+---
+- name: Download Helm install script
+  get_url:
+    url: https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+    dest: /tmp/get_helm.sh
+    mode: 700
+
+# - name: Install Helm
+
+# - name: Remove Helm install script 
+
+# - name: Retrieve helm binary archive.
+#   unarchive:
+#     src: https://get.helm.sh/helm-v3.2.1-linux-amd64.tar.gz
+#     dest: /tmp
+#     creates: /usr/local/bin/helm
+#     remote_src: yes
+    
+
+# - name: Move helm binary into place.
+#   command: cp /tmp/linux-amd64/helm /usr/local/bin/helm
+#   args:
+#     creates: /usr/local/bin/helm
+

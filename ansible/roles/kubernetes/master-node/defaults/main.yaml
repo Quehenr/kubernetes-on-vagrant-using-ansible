@@ -1,0 +1,7 @@
+master_node_user:  "dtadm"
+master_node_group: "dtadm"
+
+calico_version: "v3.18"
+
+master_apiserver_advertise_address: "192.168.101.100"
+pod_network_cidr_block: "192.168.112.0/20"

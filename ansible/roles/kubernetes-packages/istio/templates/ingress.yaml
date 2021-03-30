@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: istio-ingress
+  annotations:
+    kubernetes.io/ingress.class: istio
+spec:
+  rules:
+  - host: httpbin.example.com
+    http:
+      paths:
+      - path: /status/*
+        backend:
+          serviceName: httpbin
+          servicePort: 8000

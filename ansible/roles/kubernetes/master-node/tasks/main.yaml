@@ -1,0 +1,44 @@
+---
+- name: Reset kubenetes component
+  command: kubeadm reset --force
+  register: reset_cluser
+
+- name: Init kubernetes cluster
+  when: reset_cluser is succeeded
+  command: kubeadm init \
+    --apiserver-advertise-address="{{ master_apiserver_advertise_address }}" \
+    --apiserver-cert-extra-sans="{{ master_apiserver_advertise_address }}" \
+    --node-name="{{ node_name }}" \
+    --pod-network-cidr={{ pod_network_cidr_block }}
+  register: init_cluster
+
+- name: Create .kube dir for {{ master_node_user }}
+  file:
+    path: "/home/{{ master_node_user }}/.kube"
+    state: directory
+
+- name: Setup kubeconfig for {{ master_node_user }}
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /home/{{ master_node_user }}/.kube/config
+    remote_src: yes
+    owner: "{{ master_node_user }}"
+    group: "{{ master_node_group }}"
+    mode: 0660
+
+- name: "Copy {{ calico_version }} calico.yaml"
+  template:
+    src: calico/{{ calico_version }}/calico.yaml
+    dest: /home/{{ master_node_user }}
+
+- name: "Install the Calico resource definitions."
+  become: false
+  command: kubectl apply -f /home/{{ master_node_user }}/calico.yaml
+  
+- name: "Generate join command"
+  command: kubeadm token create --print-join-command
+  register: join_command
+
+- name: "Copy join command to local file"
+  become: false
+  local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./join-command"

@@ -1,0 +1,64 @@
+---
+- name: Set label to nodes
+  command: "kubectl label nodes {{ item }} nodeType=managed --overwrite"
+  with_items: "{{ keycloak_nodes }}"
+
+- name: Copy namespace.yaml
+  template:
+    src: namespace.yaml
+    dest: /home/vagrant
+
+- name: Apply namespace
+  command: kubectl apply -f /home/vagrant/namespace.yaml
+  register: namespace_applied
+
+- name: Remove namespace.yaml
+  file:
+    state: absent
+    path: /home/vagrant/namespace.yaml
+  when: namespace_applied
+
+- name: Copy deployment.yaml
+  template:
+    src: deployment.yaml
+    dest: /home/vagrant
+
+- name: Apply deployment
+  command: kubectl apply -f /home/vagrant/deployment.yaml
+  register: deployment_applied
+
+- name: Remove deployment.yaml
+  file:
+    state: absent
+    path: /home/vagrant/deployment.yaml
+  when: deployment_applied
+
+- name: Copy service.yaml
+  template:
+    src: service.yaml
+    dest: /home/vagrant
+
+- name: Apply service
+  command: kubectl apply -f /home/vagrant/service.yaml
+  register: service_applied
+
+- name: Remove service.yaml
+  file:
+    state: absent
+    path: /home/vagrant/service.yaml
+  when: service_applied
+
+- name: Copy ingress.yaml
+  template:
+    src: ingress.yaml
+    dest: /home/vagrant
+
+- name: Apply ingress
+  command: kubectl apply -f /home/vagrant/ingress.yaml
+  register: ingress_applied
+
+- name: Remove ingress.yaml
+  file:
+    state: absent
+    path: /home/vagrant/ingress.yaml
+  when: ingress_applied

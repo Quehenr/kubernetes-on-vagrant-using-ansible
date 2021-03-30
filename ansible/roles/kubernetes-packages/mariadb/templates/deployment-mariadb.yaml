@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb
+  namespace: {{ k8s_namespace }}
+  labels:
+    app: mariadb
+spec:
+  replicas: {{replicas}}
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+        - image: mysql:5.6
+          name: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-password
+                  key: password
+            - name: MYSQL_DATABASE # 구성할 database명
+              value: k8sdb
+            - name: MYSQL_USER # database에 권한이 있는 user
+              value: k8suser
+            - name: MYSQL_ROOT_HOST # 접근 호스트
+              value: '%'  
+            - name: MYSQL_PASSWORD # database에 권한이 있는 user의 패스워드
+              value: P@ssw0rd!!
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-volumeclaim 
+
+
+출처: https://cleanupthedesk.tistory.com/16 [clean up the desk]

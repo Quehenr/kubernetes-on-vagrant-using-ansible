@@ -1,0 +1,16 @@
+---
+- name: Install packges for pre-requires
+  yum:
+    name: "{{ packages }}"
+    state: latest
+    update_cache: true
+  vars:
+    packages:
+      - yum-utils
+      - bind-utils
+      - ca-certificates
+      - device-mapper-persistent-data
+      - lvm2
+      
+
+      

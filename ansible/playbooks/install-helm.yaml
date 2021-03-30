@@ -1,0 +1,13 @@
+---
+- name: Install helm
+  hosts: k8s-managed-1
+  become: true
+
+  vars:
+    helm_nodes: 
+      - k8s-managed-1
+    k8s:
+      namespace: managed
+
+  roles:
+    - ./roles/install-helm

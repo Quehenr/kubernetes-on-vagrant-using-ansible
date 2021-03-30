@@ -1,0 +1,16 @@
+---
+- name: Install istio
+  hosts: k8s-master
+
+  vars:
+    keycloak_nodes: 
+      - k8s-managed-1
+    k8s_namespace: managed
+    keycloak:
+      user: admin
+      password: admin
+      host_ip: "{{ ansible_eth1.ipv4.address }}"
+      port: 8080
+
+  roles:
+    - ./roles/install-istio
