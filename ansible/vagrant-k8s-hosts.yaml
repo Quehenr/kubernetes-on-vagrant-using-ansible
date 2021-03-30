@@ -1,0 +1,18 @@
+k8s_master_nodes:
+  hosts:
+    k8s-master-1:
+      ansible_host: 127.0.0.1
+      ansible_port: 2222
+      ansible_user: vagrant
+      ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
+
+k8s_work_nodes:
+  hosts:
+    k8s_managed_1:
+      ansible_host: 192.168.50.21
+      ansible_user: vagrant
+      ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
+    k8s_worker_1:
+      ansible_host: 192.168.50.31
+      ansible_user: vagrant
+      ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
