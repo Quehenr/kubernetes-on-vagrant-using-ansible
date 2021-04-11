@@ -3,6 +3,11 @@
   command: kubeadm reset --force
   register: reset_cluser
 
+- debug: msg="master_apiserver_advertise_address is {{ master_apiserver_advertise_address }}"
+
+- debug: msg="pod_network_cidr_block is {{ pod_network_cidr_block }}"
+  
+
 - name: Init kubernetes cluster
   when: reset_cluser is succeeded
   command: kubeadm init \
